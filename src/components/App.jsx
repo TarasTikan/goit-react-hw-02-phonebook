@@ -6,17 +6,20 @@ import { ContactList } from './ContactList/ContactList';
 export class App extends Component {
   state = {
     contacts: [],
-    name: 'Heelloo',
   };
 
+  FormSubmitContacts = (data) => {
+console.log(data)
+  }
   render() {
+
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm changeContact={this.handleChangeContact}/>
+        <ContactForm onSubmit={this.FormSubmitContacts}/>
 
         <h2>Contacts</h2>
-        <ContactList name={this.state.name} />
+        <ContactList/>
       </div>
     );
   }
