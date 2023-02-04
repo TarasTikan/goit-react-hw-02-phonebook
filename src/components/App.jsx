@@ -10,34 +10,52 @@ export class App extends Component {
     filter: '',
   };
 
-  FormSubmitContacts = data => {
-    const contactItems = {
-      name: data.name,
-      id: nanoid(),
-      number: data.number,
-    };
+  onDeleteContactsItem = contactId => {
     this.setState(prevState => ({
-      contacts: [contactItems, ...prevState.contacts],
+      contacts: prevState.contacts.filter(item => item.id !== contactId),
     }));
   };
 
-  changeFilter = (e) => {
+  onFormSubmitContacts = ({ name, number }) => {
+    const contactItems = {
+      name: name,
+      id: nanoid(),
+      number: number,
+    };
+    const checkName = this.state.contacts.map(({ name }) => {
+      return name;
+    });
+
+    if (checkName[0] === name) {
+      alert(`${checkName[0]} is already in contacts`);
+    } else {
+      this.setState(prevState => ({
+        contacts: [contactItems, ...prevState.contacts],
+      }));
+    }
+  };
+
+  onChangeFilter = e => {
     this.setState({ filter: e.currentTarget.value });
-  }
+  };
 
   render() {
-    console.log(this.state.contacts)
-    const normalizedFiltr = this.state.filter.toLocaleLowerCase()
-    const filterName = this.state.contacts.filter(contact => contact.name.includes(normalizedFiltr))
-    const { contacts, filter } = this.state;
+    const normalizedFiltr = this.state.filter.toLocaleLowerCase();
+    const filterName = this.state.contacts.filter(contact =>
+      contact.name.includes(normalizedFiltr)
+    );
+    const { filter } = this.state;
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.FormSubmitContacts} />
+        <ContactForm onSubmit={this.onFormSubmitContacts} />
 
         <h2>Contacts</h2>
-        <Filter value={filter} changeFilter={this.changeFilter}/>
-        <ContactList contacts={filterName} />
+        <Filter value={filter} changeFilter={this.onChangeFilter} />
+        <ContactList
+          contacts={filterName}
+          deleteContact={this.onDeleteContactsItem}
+        />
       </div>
     );
   }
