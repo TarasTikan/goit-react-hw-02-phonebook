@@ -10,16 +10,6 @@ export class App extends Component {
     filter: '',
   };
 
-  componentDidMount() {
-    const storage = localStorage.getItem('contacts');
-    const parsed = JSON.parse(storage);
-    this.setState({ contacts: parsed });
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
   onDeleteContactsItem = contactId => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(item => item.id !== contactId),
